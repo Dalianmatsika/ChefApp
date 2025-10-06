@@ -13,8 +13,6 @@ interface HomeScreenProps {
   menuItems: MenuItem[];
   onNavigateToAdd: () => void;
 }
-
-// ✅ Move this function ABOVE renderItem
 const getCourseColor = (course: MenuItem['course']) => {
   switch (course) {
     case 'Appetizer': return '#ffc107'; // Yellow
@@ -146,7 +144,7 @@ const homeStyles = StyleSheet.create({
     justifyContent: 'center',
     right: 30,
     bottom: 30,
-    backgroundColor: '#dc3545',
+    backgroundColor: '#35dcceff',
     borderRadius: 30,
     elevation: 5,
     shadowColor: '#000',

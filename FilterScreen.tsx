@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
-// NOTE: You must define your MenuItem type in '../types' for this to work.
-// Example:
-// export interface MenuItem {
-//   id: string;
-//   dishName: string;
-//   course: 'Main Course' | 'Dessert' | 'Beverage';
-//   description: string;
-//   price: number;
-// }
 interface MenuItem {
   id: string;
   dishName: string;
@@ -39,13 +30,9 @@ const FilterScreen: React.FC<FilterScreenProps> = ({ onNavigateBack, onApplyFilt
       searchQuery: searchQuery.trim(), 
       course: selectedCourse,
     });
-    // Optionally, navigate back immediately after applying filters
-    // onNavigateBack(); 
+    
   };
 
-  /**
-   * Helper component to render the course filter buttons with visual feedback.
-   */
   const CourseButton: React.FC<{ title: string; courseValue: string }> = ({ title, courseValue }) => (
     <TouchableOpacity
       style={[

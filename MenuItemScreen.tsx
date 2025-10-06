@@ -12,11 +12,7 @@ const MenuItemScreen: React.FC<MenuItemScreenProps> = ({ route, navigation }) =>
 
     return (
         <ScrollView style={styles.container}>
-            {/* NOTE: Since the MenuItem type in HomeScreen did not include 'image', 
-          this line will likely throw an error unless you add an 'image' 
-          property (e.g., { uri: 'https://via.placeholder.com/400' }) 
-          to your MenuItem objects in the App's state. 
-       */}
+        
             <Image source={{ uri: item.image }} style={styles.itemImage} />
 
             <View style={styles.detailsContainer}>

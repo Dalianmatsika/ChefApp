@@ -3,9 +3,6 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList, TextInput, 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
 
-// =================================================================
-//                 ✅ ADDED: MISSING HOME SCREEN DEFS
-// =================================================================
 export interface MenuItem {
   id: string;
   dishName: string;
@@ -19,15 +16,56 @@ export const sampleMenuItems: MenuItem[] = [
   { id: '2', dishName: 'Steak Frites', description: 'Grilled sirloin steak with crispy fries.', price: 124.50, course: 'Main Course' },
   { id: '3', dishName: 'Chocolate Lava Cake', description: 'Warm cake with a molten chocolate center.', price: 128.00, course: 'Dessert' },
   { id: '4', dishName: 'Espresso', description: 'Strong, concentrated coffee shot.', price: 113.50, course: 'Beverage' },
+  { id: '5', dishName: 'Vanilla Bean Cheesecake', course: 'Dessert', description: 'A smooth cheesecake topped with vanilla bean and a graham cracker crust.', price: 116.49 },
+  { id: '6', dishName: 'Iced Latte', course: 'Beverage', description: 'Cold espresso mixed with ice and topped with milk.', price: 124.50 },
+  { id: '7', dishName: 'Fresh Lemonade', course: 'Beverage', description: 'A refreshing, tangy lemonade made from fresh squeezed lemons.', price: 153.25 },
+  // Add more items here to see scrollbar effect
 ];
+
+const MenuList = () => {
+  return (
+    <div style={styles.sidebar}>
+      <h3 style={styles.title}>Menu</h3>
+      <div style={styles.scrollContainer}>
+        {sampleMenuItems.map(item => (
+          <div key={item.id} style={styles.menuItem}>
+            <strong>{item.dishName}</strong> — ${item.price.toFixed(2)} <br />
+            <em>{item.course}</em>
+            <p>{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  sidebar: {
+    width: '300px',
+    height: '100vh',
+    borderRight: '1px solid #ddd',
+    padding: '16px',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+  } as React.CSSProperties,
+  title: {
+    marginTop: 0,
+    marginBottom: '12px',
+  },
+  scrollContainer: {
+    overflowY: 'auto',
+    height: 'calc(100vh - 60px)', // adjusts for padding/title
+    paddingRight: '8px', // prevent text from hiding under scrollbar
+  } as React.CSSProperties,
+  menuItem: {
+    marginBottom: '16px',
+    borderBottom: '1px solid #eee',
+    paddingBottom: '8px',
+  } as React.CSSProperties,
+};
 
 // Placeholder for the imported HomeScreen component (you seem to render its logic inline)
 const HomeScreen: React.FC<any> = ({ children }) => <>{children}</>;
-// =================================================================
-
-// =================================================================
-//                 ✅ ADDED: MISSING SCREEN COMPONENTS
-// =================================================================
 
 // Placeholder for FilterScreen
 const FilterScreen: React.FC<any> = ({ onApplyFilters, onNavigateBack }) => {
@@ -113,9 +151,7 @@ const AddMenuScreen: React.FC<{ onAddMenuItem: (item: MenuItem) => void; navigat
     </View>
   );
 };
-// =================================================================
 
-// --- Type Definitions for Navigation ---
 type RootStackParamList = {
   Home: {
     menuItems: MenuItem[];
@@ -267,9 +303,6 @@ const App: React.FC = () => {
   );
 };
 
-// =================================================================
-//                 ✅ ADDED: STYLES FOR PLACEHOLDERS
-// =================================================================
 const filterStyles = StyleSheet.create({
   input: {
     height: 40,
@@ -282,9 +315,7 @@ const filterStyles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
 });
-// =================================================================
 
-// ✅ Strongly typed styles
 const homeStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -408,7 +439,6 @@ const appStyles = StyleSheet.create({
   },
 });
 
-// Helper to get color for course type
 const getCourseColor = (course: MenuItem['course']) => {
   switch (course) {
     case 'Appetizer':
