@@ -1,9 +1,6 @@
-import React from 'react';
+import React from 'react';  
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
-// --- 1. Define MenuItem Interface ---
-// It's best practice to keep this in a separate types file, but defining it here 
-// ensures the component is runnable if the external file is missing.
 export interface MenuItem {
   id: string;
   dishName: string;
@@ -11,13 +8,22 @@ export interface MenuItem {
   description: string;
   price: number;
 }
-// ------------------------------------
 
-// --- 2. Home Screen Component ---
 interface HomeScreenProps {
   menuItems: MenuItem[];
   onNavigateToAdd: () => void;
 }
+
+// ✅ Move this function ABOVE renderItem
+const getCourseColor = (course: MenuItem['course']) => {
+  switch (course) {
+    case 'Appetizer': return '#ffc107'; // Yellow
+    case 'Main Course': return '#dc3545'; // Red
+    case 'Dessert': return '#007bff'; // Blue
+    case 'Beverage': return '#17a2b8'; // Teal
+    default: return '#6c757d';
+  }
+};
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ menuItems, onNavigateToAdd }) => {
   const totalItems = menuItems.length;
@@ -26,27 +32,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ menuItems, onNavigateToAdd }) =
     <View style={homeStyles.itemContainer}>
       <View style={{ flex: 1 }}>
         <Text style={homeStyles.dishName}>{item.dishName}</Text>
-        {/* Added dynamic color for the course badge */}
         <Text style={[homeStyles.course, { color: getCourseColor(item.course) }]}>{item.course}</Text>
         <Text style={homeStyles.description}>{item.description}</Text>
       </View>
       <Text style={homeStyles.price}>${item.price.toFixed(2)}</Text>
     </View>
   );
-  
-  // Helper function for course color coding (New addition for UX)
-  const getCourseColor = (course: MenuItem['course']) => {
-    switch (course) {
-      case 'Appetizer': return '#ffc107'; // Yellow
-      case 'Main Course': return '#dc3545'; // Red
-      case 'Dessert': return '#007bff'; // Blue
-      case 'Beverage': return '#17a2b8'; // Teal
-      default: return '#6c757d';
-    }
-  };
 
-
-return (
+  return (
     <View style={homeStyles.container}>
       {/* Menu Summary Section */}
       <View style={homeStyles.summaryBox}>
@@ -59,12 +52,11 @@ return (
         data={menuItems}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        // Corrected conditional styling
         contentContainerStyle={totalItems === 0 ? homeStyles.emptyListContainer : null}
         ListEmptyComponent={<Text style={homeStyles.emptyText}>Menu is empty. Press '+' to add a dish!</Text>}
       />
 
-      {/* Add Button (Floating Action Button style) */}
+      {/* Add Button */}
       <TouchableOpacity 
         style={homeStyles.addButton} 
         onPress={onNavigateToAdd}
@@ -76,10 +68,7 @@ return (
   );
 };
 
-// --- 3. Sample Menu Items ---
-
 export const sampleMenuItems: MenuItem[] = [
-  // Main Courses
   { 
     id: '1', dishName: 'Filet Mignon', course: 'Main Course', 
     description: 'A tender cut of beef served with mashed potatoes and vegetables.', price: 29.99
@@ -88,14 +77,10 @@ export const sampleMenuItems: MenuItem[] = [
     id: '2', dishName: 'Chicken Parmesan', course: 'Main Course', 
     description: 'Breaded chicken topped with marinara sauce and mozzarella.', price: 22.99
   },
-
-  // Appetizers
   { 
     id: '3', dishName: 'Spring Rolls', course: 'Appetizer', 
     description: 'Crispy rolls filled with vegetables and served with sweet sauce.', price: 6.99
   },
-  
-  // Desserts
   { 
     id: '4', dishName: 'Chocolate Lava Cake', course: 'Dessert', 
     description: 'A rich chocolate cake with a gooey, molten center.', price: 7.99
@@ -104,8 +89,6 @@ export const sampleMenuItems: MenuItem[] = [
     id: '5', dishName: 'Vanilla Bean Cheesecake', course: 'Dessert', 
     description: 'A smooth cheesecake topped with vanilla bean and a graham cracker crust.', price: 6.49
   },
-  
-  // Beverages
   { 
     id: '6', dishName: 'Iced Latte', course: 'Beverage', 
     description: 'Cold espresso mixed with ice and topped with milk.', price: 4.50
@@ -116,12 +99,11 @@ export const sampleMenuItems: MenuItem[] = [
   },
 ];
 
-// --- 4. Styles ---
 const homeStyles = StyleSheet.create({
   container: {
     flex: 1, 
     padding: 10,
-    backgroundColor: '#fff', // Added background for better appearance
+    backgroundColor: '#fff',
   },
   summaryBox: {
     backgroundColor: '#e6f7ff',
@@ -131,8 +113,8 @@ const homeStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    elevation: 2, // Simple shadow for Android
-    shadowColor: '#000', // Simple shadow for iOS
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
@@ -162,7 +144,7 @@ const homeStyles = StyleSheet.create({
   },
   course: {
     fontSize: 14,
-    fontWeight: 'bold', // Bolded course for emphasis
+    fontWeight: 'bold',
     marginTop: 2,
     marginBottom: 4,
   },
@@ -193,11 +175,11 @@ const homeStyles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 30, // Increased distance from edge
-    bottom: 30, // Increased distance from edge
-    backgroundColor: '#dc3545', // Red color for 'Add' action
+    right: 30,
+    bottom: 30,
+    backgroundColor: '#dc3545',
     borderRadius: 30,
-    elevation: 5, // Floating effect
+    elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.4,
@@ -207,7 +189,7 @@ const homeStyles = StyleSheet.create({
     color: 'white',
     fontSize: 35,
     lineHeight: 35,
-    marginBottom: 2, // Minor adjustment for visual centering
+    marginBottom: 2,
   },
 });
 
