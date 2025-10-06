@@ -23,7 +23,7 @@ const MenuItemScreen: React.FC<MenuItemScreenProps> = ({ route, navigation }) =>
                 <Text style={styles.dishName}>{item.dishName}</Text>
                 <Text style={styles.course}>{item.course}</Text>
                 <Text style={styles.description}>{item.description}</Text>
-                <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+                <Text style={styles.price}>R{item.price.toFixed(2)}</Text>
 
                 {/* Optional: Add a button to go back to Home screen */}
                 <Button

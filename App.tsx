@@ -1,12 +1,119 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList, TextInput, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
 
-import HomeScreen, { MenuItem, sampleMenuItems } from './HomeScreen';
-import FilterScreen from './FilterScreen';
-import MenuItemScreen from './MenuItemScreen';
-import AddMenuScreen from './AddMenuScreen'; // <-- Import your full AddMenuScreen here
+// =================================================================
+//                 ✅ ADDED: MISSING HOME SCREEN DEFS
+// =================================================================
+export interface MenuItem {
+  id: string;
+  dishName: string;
+  description: string;
+  price: number;
+  course: 'Appetizer' | 'Main Course' | 'Dessert' | 'Beverage';
+}
+
+export const sampleMenuItems: MenuItem[] = [
+  { id: '1', dishName: 'Caesar Salad', description: 'Classic starter with romaine lettuce and croutons.', price: 129.99, course: 'Appetizer' },
+  { id: '2', dishName: 'Steak Frites', description: 'Grilled sirloin steak with crispy fries.', price: 124.50, course: 'Main Course' },
+  { id: '3', dishName: 'Chocolate Lava Cake', description: 'Warm cake with a molten chocolate center.', price: 128.00, course: 'Dessert' },
+  { id: '4', dishName: 'Espresso', description: 'Strong, concentrated coffee shot.', price: 113.50, course: 'Beverage' },
+];
+
+// Placeholder for the imported HomeScreen component (you seem to render its logic inline)
+const HomeScreen: React.FC<any> = ({ children }) => <>{children}</>;
+// =================================================================
+
+// =================================================================
+//                 ✅ ADDED: MISSING SCREEN COMPONENTS
+// =================================================================
+
+// Placeholder for FilterScreen
+const FilterScreen: React.FC<any> = ({ onApplyFilters, onNavigateBack }) => {
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [searchText, setSearchText] = useState('');
+
+  return (
+    <View style={appStyles.centeredContainer}>
+      <Text style={appStyles.placeholderText}>Filter Screen</Text>
+      <TextInput
+        style={filterStyles.input}
+        placeholder="Search dish name..."
+        value={searchText}
+        onChangeText={setSearchText}
+      />
+      {/* Simple course filter example */}
+      <Button title={`Filter by ${selectedCourse || 'All Courses'}`} onPress={() => Alert.alert('Course Selection Placeholder')} />
+      <View style={{ height: 10 }} />
+      <Button
+        title="Apply Filters"
+        onPress={() => onApplyFilters({ course: selectedCourse, searchQuery: searchText })}
+        color="#28a745"
+      />
+      <View style={{ height: 10 }} />
+      <Button title="Cancel" onPress={onNavigateBack} color="#6c757d" />
+    </View>
+  );
+};
+
+// Placeholder for MenuItemScreen
+const MenuItemScreen: React.FC<ItemDetailsProps> = ({ route }) => {
+  const { item } = route.params;
+  return (
+    <View style={appStyles.centeredContainer}>
+      <Text style={appStyles.placeholderText}>{item.dishName} Details</Text>
+      <Text style={appStyles.placeholderSubText}>{item.description}</Text>
+      <Text style={[appStyles.placeholderSubText, { color: '#dc3545' }]}>Price: R{item.price.toFixed(2)}</Text>
+    </View>
+  );
+};
+
+// Placeholder for AddMenuScreen
+const AddMenuScreen: React.FC<{ onAddMenuItem: (item: MenuItem) => void; navigation: any }> = ({ onAddMenuItem }) => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [course, setCourse] = useState<MenuItem['course']>('Appetizer');
+
+  const handleSave = () => {
+    if (!name || !price || isNaN(parseFloat(price))) {
+      Alert.alert('Error', 'Please enter a valid dish name and price.');
+      return;
+    }
+
+    const newItem: MenuItem = {
+      id: Date.now().toString(), // Simple ID generation
+      dishName: name,
+      description: description || 'No description provided.',
+      price: parseFloat(price),
+      course: course,
+    };
+
+    onAddMenuItem(newItem);
+  };
+
+  return (
+    <View style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}>
+      <Text style={appStyles.placeholderText}>Add New Dish</Text>
+      <TextInput style={filterStyles.input} placeholder="Dish Name" value={name} onChangeText={setName} />
+      <TextInput style={filterStyles.input} placeholder="Description" value={description} onChangeText={setDescription} />
+      <TextInput
+        style={filterStyles.input}
+        placeholder="Price"
+        value={price}
+        onChangeText={setPrice}
+        keyboardType="numeric"
+      />
+      {/* Simple course selection */}
+      <Text style={{ marginTop: 15, fontSize: 16 }}>Course: {course}</Text>
+      <Button title={`Set Course: ${course}`} onPress={() => Alert.alert('Course Selector Placeholder')} />
+      <View style={{ height: 20 }} />
+      <Button title="Save Dish" onPress={handleSave} color="#28a745" />
+    </View>
+  );
+};
+// =================================================================
 
 // --- Type Definitions for Navigation ---
 type RootStackParamList = {
@@ -116,7 +223,7 @@ const App: React.FC = () => {
                           </Text>
                           <Text style={homeStyles.description}>{item.description}</Text>
                         </View>
-                        <Text style={homeStyles.price}>${item.price.toFixed(2)}</Text>
+                        <Text style={homeStyles.price}>R{item.price.toFixed(2)}</Text>
                       </View>
                     </TouchableOpacity>
                   )}
@@ -159,6 +266,23 @@ const App: React.FC = () => {
     </NavigationContainer>
   );
 };
+
+// =================================================================
+//                 ✅ ADDED: STYLES FOR PLACEHOLDERS
+// =================================================================
+const filterStyles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    width: '100%',
+    backgroundColor: '#f8f8f8',
+  },
+});
+// =================================================================
 
 // ✅ Strongly typed styles
 const homeStyles = StyleSheet.create({
